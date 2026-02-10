@@ -3,6 +3,7 @@ import glob
 import gzip
 import json
 import os
+from tqdm import tqdm
 
 SNAPSHOT_DIR = "openalex-snapshot"
 CSV_DIR = "csv-files"
@@ -403,10 +404,10 @@ def flatten_authors():
         counts_by_year_writer.writeheader()
 
         files_done = 0
-        for jsonl_file_name in glob.glob(
+        author_files = glob.glob(
             os.path.join(SNAPSHOT_DIR, innerFolder, "authors", "*", "*.gz")
-        ):
-            print(jsonl_file_name)
+        )
+        for jsonl_file_name in tqdm(author_files, desc="Processing authors"):
             with gzip.open(jsonl_file_name, "r") as authors_jsonl:
                 for author_json in authors_jsonl:
                     if not author_json.strip():
@@ -452,10 +453,10 @@ def flatten_topics():
 
         seen_topic_ids = set()
         files_done = 0
-        for jsonl_file_name in glob.glob(
+        topic_files = glob.glob(
             os.path.join(SNAPSHOT_DIR, innerFolder, "topics", "*", "*.gz")
-        ):
-            print(jsonl_file_name)
+        )
+        for jsonl_file_name in tqdm(topic_files, desc="Processing topics"):
             with gzip.open(jsonl_file_name, "r") as topics_jsonl:
                 for line in topics_jsonl:
                     if not line.strip():
@@ -525,10 +526,10 @@ def flatten_concepts():
         seen_concept_ids = set()
 
         files_done = 0
-        for jsonl_file_name in glob.glob(
+        concept_files = glob.glob(
             os.path.join(SNAPSHOT_DIR, innerFolder, "concepts", "*", "*.gz")
-        ):
-            print(jsonl_file_name)
+        )
+        for jsonl_file_name in tqdm(concept_files, desc="Processing concepts"):
             with gzip.open(jsonl_file_name, "r") as concepts_jsonl:
                 for concept_json in concepts_jsonl:
                     if not concept_json.strip():
@@ -629,10 +630,10 @@ def flatten_institutions():
         seen_institution_ids = set()
 
         files_done = 0
-        for jsonl_file_name in glob.glob(
+        institution_files = glob.glob(
             os.path.join(SNAPSHOT_DIR, innerFolder, "institutions", "*", "*.gz")
-        ):
-            print(jsonl_file_name)
+        )
+        for jsonl_file_name in tqdm(institution_files, desc="Processing institutions"):
             with gzip.open(jsonl_file_name, "r") as institutions_jsonl:
                 for institution_json in institutions_jsonl:
                     if not institution_json.strip():
@@ -728,10 +729,10 @@ def flatten_publishers():
         seen_publisher_ids = set()
 
         files_done = 0
-        for jsonl_file_name in glob.glob(
+        publisher_files = glob.glob(
             os.path.join(SNAPSHOT_DIR, innerFolder, "publishers", "*", "*.gz")
-        ):
-            print(jsonl_file_name)
+        )
+        for jsonl_file_name in tqdm(publisher_files, desc="Processing publishers"):
             with gzip.open(jsonl_file_name, "r") as concepts_jsonl:
                 for publisher_json in concepts_jsonl:
                     if not publisher_json.strip():
@@ -800,10 +801,10 @@ def flatten_sources():
         seen_source_ids = set()
 
         files_done = 0
-        for jsonl_file_name in glob.glob(
+        source_files = glob.glob(
             os.path.join(SNAPSHOT_DIR, innerFolder, "sources", "*", "*.gz")
-        ):
-            print(jsonl_file_name)
+        )
+        for jsonl_file_name in tqdm(source_files, desc="Processing sources"):
             with gzip.open(jsonl_file_name, "r") as sources_jsonl:
                 for source_json in sources_jsonl:
                     if not source_json.strip():
@@ -893,10 +894,10 @@ def flatten_works():
         )
 
         files_done = 0
-        for jsonl_file_name in glob.glob(
+        work_files = glob.glob(
             os.path.join(SNAPSHOT_DIR, innerFolder, "works", "*", "*.gz")
-        ):
-            print(jsonl_file_name)
+        )
+        for jsonl_file_name in tqdm(work_files, desc="Processing works"):
             with gzip.open(jsonl_file_name, "r") as works_jsonl:
                 for work_json in works_jsonl:
                     if not work_json.strip():
@@ -1068,10 +1069,10 @@ def init_dict_writer(csv_file, file_spec, **kwargs):
 
 
 if __name__ == "__main__":
-    flatten_topics()
     flatten_authors()
     flatten_concepts()
     flatten_institutions()
     flatten_publishers()
     flatten_sources()
+    flatten_topics()
     flatten_works()
